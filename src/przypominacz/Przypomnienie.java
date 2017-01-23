@@ -22,13 +22,15 @@ public class Przypomnienie {
     private Time last;
     private Long coIle;
     private PrzypomnienieFrame frame;
+    private Warunek warunek;
     
     private static Logger logger = Logger.getInstance();
     
-    private Przypomnienie(){
+    private Przypomnienie() {
+         warunek = new Warunek();
     }
     
-    public static Przypomnienie getInstance(){
+    public static Przypomnienie getInstance() {
         if(instance!=null){
             return instance;
         }else{
@@ -44,33 +46,12 @@ public class Przypomnienie {
     }
     
     public boolean isReady(){
-       return isGoodTime() && !isProcessRunning("csgo.exe");
+       return isGoodTime() && warunek.isDone();
     }
     
     private boolean isGoodTime(){
         logger.debug(now.getTime()+">"+last.getTime()+"+"+coIle +" result: "+(now.getTime()>last.getTime()+coIle));
         return now.getTime()>last.getTime()+coIle;
-    }
-    
-    private static boolean isProcessRunning(String processName){
-        String tasksList="";
-        try{
-            ProcessBuilder processBuilder = new ProcessBuilder("tasklist.exe");
-            Process process = processBuilder.start();
-            tasksList = toString(process.getInputStream());
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-
-        return tasksList.contains(processName);
-    }
-
-    private static String toString(InputStream inputStream){
-        Scanner scanner = new Scanner(inputStream, "UTF-8").useDelimiter("\\A");
-        String string = scanner.hasNext() ? scanner.next() : "";
-        scanner.close();
-
-        return string;
     }
     
     public void showPrzypomnienie(){
