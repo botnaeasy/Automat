@@ -26,5 +26,8 @@ public class MainApp {
         }catch(Exception e){
             
         }
+
+        System.out.println("Test");
+        System.out.println("Test1");
     }
 }
